@@ -36,3 +36,13 @@ Options:
   -W WEEK, --week=WEEK  The date of Monday of the week, should be in the form
                         of YYYY-MM-DD. (e.g. 2012-01-26)
 </pre>
+
+Bugs / Features
+===============
+* If you find bugs, please do submit it at this repos's [issues][0] page, and label it with #bug.
+* If you would like new features, submit it at issues, but label it with #features.
+
+* Got a new feature implemented? Make a pull request, so that we can all benefit from it. :)
+
+
+[0]: https://github.com/mavjs/ucti-timetable/issues
