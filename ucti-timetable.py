@@ -54,10 +54,10 @@ def main(argv=None):
     print("Week: %s" % week)
     print("Folder for all your timetable files will be at: %s" % storage_dir)
     print("The file will be at: %s" % storage_file)
-    req = urllib2.urlopen(base_url+"Intake1="+intake+"&Submit=Submit&Week="+week)
-    html = req.read()
     if not os.path.exists(storage_dir):
         os.makedirs(storage_dir)
+        req = urllib2.urlopen(base_url+"Intake1="+intake+"&Submit=Submit&Week="+week)
+        html = req.read()
         f = file(storage_file, 'w')
         f.write(html)
         f.close()
