@@ -76,6 +76,18 @@ def main(argv=None):
                     browser = webbrowser
                 print("Opening the browser...")
                 browser.open(storage_file)
+        elif not os.path.isfile(storage_file):
+            req = urllib2.urlopen(base_url+"Intake1="+intake+"&Submit=Submit&Week="+week)
+            html = req.read()
+            f = file(storage_file, 'w')
+            f.write(html)
+            f.close()
+            try:
+                browser = webbrowser.get("firefox")
+            except webbrowser.Error:
+                browser = webbrowser
+            print("Opening the browser...")
+            browser.open(storage_file)
     return(0)
 
 if __name__ == "__main__":
