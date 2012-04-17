@@ -20,6 +20,7 @@ import os
 import sys
 import webbrowser
 from optparse import OptionParser
+from BeautifulSoup import BeautifulSoup
 
 def main(argv=None):
    
@@ -58,8 +59,18 @@ def main(argv=None):
         os.makedirs(storage_dir)
         req = urllib2.urlopen(base_url+"Intake1="+intake+"&Submit=Submit&Week="+week)
         html = req.read()
+        parse_html = BeautifulSoup(html)
+        final_html = parse_html.find("table", {"border": "1"})
         f = file(storage_file, 'w')
-        f.write(html)
+        f.write(str('<!DOCTYPE html>'))
+        f.write(str('<html>'))
+        f.write(str('<body>'))
+        f.write(str('<table border=1 width=100% cellpadding=5 cellspacing=0>'))
+        for line in final_html:
+            f.write(str(line))
+        f.write(str('</table>'))
+        f.write(str('</body>'))
+        f.write(str('</html>'))
         f.close()
         try:
             browser = webbrowser.get("firefox")
@@ -79,8 +90,18 @@ def main(argv=None):
         elif not os.path.isfile(storage_file):
             req = urllib2.urlopen(base_url+"Intake1="+intake+"&Submit=Submit&Week="+week)
             html = req.read()
+            parse_html = BeautifulSoup(html)
+            final_html = parse_html.find("table", {"border": "1"})
             f = file(storage_file, 'w')
-            f.write(html)
+            f.write(str('<!DOCTYPE html>'))
+            f.write(str('<html>'))
+            f.write(str('<body>'))
+            f.write(str('<table border=1 width=100% cellpadding=5 cellspacing=0>'))
+            for line in final_html:
+                f.write(str(line))
+            f.write(str('</table>'))
+            f.write(str('</body>'))
+            f.write(str('</html>'))
             f.close()
             try:
                 browser = webbrowser.get("firefox")
