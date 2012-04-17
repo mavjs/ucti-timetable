@@ -27,9 +27,9 @@ Executing the script with the "-h" or "--help" option should show you this help;
     Usage: ucti-timetable.py [options]
 
     Options:
-    -h, --help                     show this help message and exit
-    -I INTAKE, --intake=INTAKE     Your UCTI Intake Code (e.g. UC1F1101IT)
-  -W WEEK, --week=WEEK             The date of Monday of the week, should be in the form of YYYY-MM-DD. (e.g. 2012-01-26)
+    -h, --help                  show this help message and exit
+    -I INTAKE, --intake=INTAKE  Your UCTI Intake Code (e.g. UC1F1101IT)
+    -W WEEK, --week=WEEK        The date of Monday of the week, should be in the form of YYYY-MM-DD. (e.g. 2012-01-26)
 
 Bugs / Features
 ===============
