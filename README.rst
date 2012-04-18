@@ -11,6 +11,11 @@ License
 * This script is licensed as GPLv3 - "GNU GENERAL PUBLIC LICENSE" version 3.
 * The copy of the license is included with the source code.
 
+Requirements
+============
+* Need BeautifulSoup_. [This is the only external library I've ever needed though.]
+
+.. _BeautifulSoup: http://www.crummy.com/software/BeautifulSoup
 
 Usage
 =====
