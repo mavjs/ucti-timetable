@@ -61,9 +61,12 @@ def main(argv=None):
     print('The file will be at: %s' % storage_file)
     if not os.path.exists(storage_dir):
         os.makedirs(storage_dir)
-        req = urllib2.urlopen(base_url + 'Intake1=' + intake + \
+        request = urllib2.Request(base_url + 'Intake1=' + intake + \
                 '&Submit=Submit&Week=' + week)
-        html = req.read()
+        request.add_header('User-Agent', \
+                'ucti-timetable.py/1.0 (+https://github.com/mavjs/ucti-timetable)')
+        opener = urllib2.build_opener()
+        html = opener.open(request).read()
         parse_html = BeautifulSoup(html)
         final_html = parse_html.find('table', {'border': '1'})
         f = file(storage_file, 'w')
@@ -89,9 +92,12 @@ def main(argv=None):
                 print('Opening the browser...')
                 browser.open(storage_file)
         elif not os.path.isfile(storage_file):
-            req = urllib2.urlopen(base_url + 'Intake1=' + intake + \
-                    '&Submit=Submit&Week=' + week)
-            html = req.read()
+            request = urllib2.Request(base_url + 'Intake1=' + intake + \
+                '&Submit=Submit&Week=' + week)
+            request.add_header('User-Agent', \
+                    'ucti-timetable.py/1.0 (+https://github.com/mavjs/ucti-timetable)')
+            opener = urllib2.build_opener()
+            html = opener.open(request).read()
             parse_html = BeautifulSoup(html)
             final_html = parse_html.find('table', {'border': '1'})
             f = file(storage_file, 'w')
