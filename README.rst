@@ -3,7 +3,7 @@ About
 * This is a python script to download timetable for UCTI students.
 * It is very minimal and make use of standard python libraries.
 * It has only been tested on Fedora 16, but it should nonetheless work on GNU/Linux and nix systems.
-* [NOTE] it has never been tested on a Microsoft Windows.
+* [NOTE] it has been tested on a Microsoft Windows, but you've to do things such as this `workaround <http://blog.mavjs.org/2012/04/getting-python-libraries-installed.html>`_
 
 
 License
