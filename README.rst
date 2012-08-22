@@ -3,8 +3,7 @@ About
 * This is a python script to download timetable for UCTI students.
 * It is very minimal and make use of standard python libraries.
 * It has only been tested on Fedora 16, but it should nonetheless work on GNU/Linux and nix systems.
-* [NOTE] it has been tested on a Microsoft Windows, but you've to do things such as this `workaround <http://blog.mavjs.org/2012/04/getting-python-libraries-installed.html>`_
-
+* [NOTE] it has been tested on a Microsoft Windows 7 Ultimate, but you've to do things like this `workaround <http://blog.mavjs.org/2012/04/getting-python-libraries-installed.html>`_.
 
 License
 =======
@@ -16,6 +15,11 @@ Requirements
 * Need BeautifulSoup_. [This is the only external library I've ever needed though.]
 
 .. _BeautifulSoup: http://www.crummy.com/software/BeautifulSoup
+
+* If you have `pip <http://www.pip-installer.org/>`_ - a tool for installing and managing Python packages installed. You can install BeautifulSoup with pip, like this::
+
+    ~# pip install -r requirements.txt
+* [NOTE] The 'requirements.txt' file is included in the repository.
 
 Usage
 =====
