@@ -2,8 +2,8 @@ About
 =====
 * This is a python script to download timetable for UCTI students.
 * It is very minimal and make use of standard python libraries.
-* It has only been tested on Fedora 16, but it should nonetheless work on GNU/Linux and nix systems.
-* [NOTE] it has been tested on a Microsoft Windows 7 Ultimate, but you've to do things like this `workaround <http://blog.mavjs.org/2012/04/getting-python-libraries-installed.html>`_.
+* It has only been tested on Fedora 16/17, but it should nonetheless work on GNU/Linux and nix systems that has GTK+ 3.
+* [NOTE] It can only be used with GTK+ 3 therefore doesn't work with Microsoft Windows.
 
 License
 =======
@@ -30,15 +30,6 @@ Either execute the script as,
 or make it executable and use,
 ::
     ~# chmod +x ucti-timetable.py
-
-Executing the script with the "-h" or "--help" option should show you this help;
-::
-    Usage: ucti-timetable.py [options]
-
-    Options:
-    -h, --help                  show this help message and exit
-    -I INTAKE, --intake=INTAKE  Your UCTI Intake Code (e.g. UC1F1101IT)
-    -W WEEK, --week=WEEK        The date of Monday of the week, should be in the form of YYYY-MM-DD. (e.g. 2012-01-26)
 
 Bugs / Features
 ===============
