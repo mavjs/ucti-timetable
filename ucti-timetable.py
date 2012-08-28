@@ -16,106 +16,86 @@
 #along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import urllib2
-import os
-import sys
-import webbrowser
-import argparse
+from gi.repository import Gtk, WebKit
 from BeautifulSoup import BeautifulSoup
+from datetime import datetime, date, timedelta
 
+class MyWindow(Gtk.Window):
 
-def main(argv=None):
-    " Arguments to go together with the program "
-    parser = argparse.ArgumentParser(description='Download your intake \
-            timetable for the week from UCTI.', version='0.5')
-    parser.add_argument('-I', '--intake', dest='intake', action='store', \
-            default='', help='Your UCTI Intake Code (e.g. UC1F1101IT)')
-    parser.add_argument('-W', '--week', dest='week', action='store', \
-            default='', help='The date of Monday of the week, should be in \
-            the form of YYYY-MM-DD. (e.g. 2012-01-26)')
+    def __init__(self):
+        """ to get current date time to parse later on. """
+        self.now = datetime.now()
+        self.year = datetime.date(self.now).isocalendar()[0]
+        self.week = datetime.date(self.now).isocalendar()[1]
 
-    " Just tring to make things easier "
-    args = parser.parse_args()
+        """ initializing the GTK Window """
+        Gtk.Window.__init__(self, title="UCTI Timetable Downloader")
+        self.resize(400, 600)
 
-    if (args.intake and args.week) == '':
-        print(parser.print_help())
-        return(0)
-    elif args.intake == '':
-        print(parser.print_help())
-        return(0)
-    elif args.week == '':
-        print(parser.print_help())
-        return(0)
-    else:
-        intake = args.intake
-        week = args.week
+        self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.add(self.vbox)
 
-    base_url = 'http://webspace.apiit.edu.my/schedule/intakeview_intake.jsp?'
-    storage = 'UCTI-Timetable'
-    home_path = os.path.expanduser('~')
-    storage_dir = os.path.join(home_path, storage)
-    file_name = intake + '-' + week + '.html'
-    storage_file = os.path.join(storage_dir, file_name)
+        self.hbox = Gtk.Box(spacing=6)
+        self.vbox.pack_start(self.hbox, False, True, 0)
 
-    print('Your intake: %s' % intake)
-    print('Week: %s' % week)
-    print('Folder for all your timetable files will be at: %s' % storage_dir)
-    print('The file name is: %s' % file_name)
-    print('The file will be at: %s' % storage_file)
-    if not os.path.exists(storage_dir):
-        os.makedirs(storage_dir)
-        request = urllib2.Request(base_url + 'Intake1=' + intake + \
-                '&Submit=Submit&Week=' + week)
+        self.intake_label = Gtk.Label("Your intake: ")
+        self.hbox.pack_start(self.intake_label, False, True, 10)
+
+        self.intake = Gtk.Entry()
+        self.hbox.pack_start(self.intake, True, True, 10)
+        
+        self.date_label = Gtk.Label("Date of the current week: ")
+        self.hbox.pack_start(self.date_label, False, True, 10)
+
+        self.date = self.monday_of_week()
+        self.date_combox = Gtk.ComboBoxText()
+        self.date_combox.append_text(self.date)
+
+        self.hbox.pack_start(self.date_combox, False, True, 10)
+        
+        self.go = Gtk.Button(stock=Gtk.STOCK_APPLY)
+        self.go.connect("clicked", self.on_button_clicked)
+        self.hbox.pack_start(self.go, False, True, 10)
+
+        self.scroller = Gtk.ScrolledWindow()
+        self.browser = WebKit.WebView()
+        self.browser.connect("title-changed", self.title_changed)
+        self.scroller.add(self.browser)
+        self.vbox.pack_end(self.scroller, True, True, 0)
+
+    def monday_of_week(self):
+        """ date of monday of the week parsing first. """
+        d = date(self.year, 1, 1)    
+        delta_days = d.isoweekday() - 1
+        delta_weeks = self.week
+        if self.year == d.isocalendar()[0]:
+            delta_weeks -= 1
+        # delta for the beginning of the week
+        delta = timedelta(days=-delta_days, weeks=delta_weeks)
+        weekbegin = d + delta
+        return str(weekbegin)
+
+    def on_button_clicked(self, widget):
+        if not (self.intake.get_text() is None and self.date_combox.get_active_text() is None):
+            print self.intake.get_text().upper()
+            print self.date_combox.get_active_text()
+            html_to_load = self.strip_crappy_stuff()
+            self.browser.load_string(str(html_to_load), "text/html", "UTF-8", "")
+
+    def title_changed(self, webview, frame, title):
+        self.set_title(title)
+
+    def strip_crappy_stuff(self):
+        request = urllib2.Request('http://webspace.apiit.edu.my/schedule/intakeview_intake.jsp?Intake1=' + self.intake.get_text().upper() + '&Submit=Submit&Week=' + self.date_combox.get_active_text())
         request.add_header('User-Agent', \
                 'ucti-timetable.py/1.0 (+https://github.com/mavjs/ucti-timetable)')
         opener = urllib2.build_opener()
         html = opener.open(request).read()
         parse_html = BeautifulSoup(html)
-        final_html = parse_html.find('table', {'border': '1'})
-        f = file(storage_file, 'w')
-        f.write(str('<!DOCTYPE html>\n<html>\n<title>%s</title>\n<body>\n' \
-                % file_name))
-        f.write(str(final_html))
-        f.write(str('\n<p>Generated by <a href="https://github.com/mavjs/ucti-timetable">ucti-timetable.py</a></p>'))
-        f.write(str('\n</body>\n</html>'))
-        f.close()
-        try:
-            browser = webbrowser.get('firefox')
-        except webbrowser.Error:
-            browser = webbrowser
-        print('Opening the browser...')
-        browser.open(storage_file)
+        final_html = parse_html.find('table', {'border': '1'}).prettify()
+        return final_html
 
-    elif os.path.exists(storage_dir):
-        if os.path.isfile(storage_file):
-                try:
-                    browser = webbrowser.get('firefox')
-                except webbrowser.Error:
-                    browser = webbrowser
-                print('Opening the browser...')
-                browser.open(storage_file)
-        elif not os.path.isfile(storage_file):
-            request = urllib2.Request(base_url + 'Intake1=' + intake + \
-                '&Submit=Submit&Week=' + week)
-            request.add_header('User-Agent', \
-                    'ucti-timetable.py/1.0 (+https://github.com/mavjs/ucti-timetable)')
-            opener = urllib2.build_opener()
-            html = opener.open(request).read()
-            parse_html = BeautifulSoup(html)
-            final_html = parse_html.find('table', {'border': '1'})
-            f = file(storage_file, 'w')
-            f.write(str('<!DOCTYPE html>\n<html>\n<title>%s</title>\n<body>\n' \
-                % file_name))
-            f.write(str(final_html))
-            f.write(str('\n<p>Generated by <a href="https://github.com/mavjs/ucti-timetable">ucti-timetable.py</a></p>'))
-            f.write(str('\n</body>\n</html>'))
-            f.close()
-            try:
-                browser = webbrowser.get('firefox')
-            except webbrowser.Error:
-                browser = webbrowser
-            print('Opening the browser...')
-            browser.open(storage_file)
-    return(0)
-
-if __name__ == '__main__':
-    sys.exit(main())
+win = MyWindow()
+win.connect("delete-event", Gtk.main_quit)
+win.show_all()
+Gtk.main()
