@@ -1,4 +1,5 @@
 Things to Improve
 =================
-* need to add script header, something along the lines of ("UCTI-Timetable-Downloader/1.0")
-* need to make it parse only the _real_ timetable better
+* drop down selection for intakes.
+* three dates of 3 weeks must be present at all times. (following UCTI style)
+* split codes. [gui, screen scraper, date getter]
