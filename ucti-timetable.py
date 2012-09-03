@@ -77,8 +77,6 @@ class MyWindow(Gtk.Window):
 
     def on_button_clicked(self, widget):
         if not (self.intake.get_text() is None and self.date_combox.get_active_text() is None):
-            print self.intake.get_text().upper()
-            print self.date_combox.get_active_text()
             html_to_load = self.strip_crappy_stuff()
             self.browser.load_string(str(html_to_load), "text/html", "UTF-8", "")
 
