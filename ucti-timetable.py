@@ -49,7 +49,7 @@ def main(argv=None):
         intake = args.intake
         week = args.week
 
-    base_url = 'http://webspace.apiit.edu.my/schedule/intakeview_intake.jsp?'
+    base_url = 'http://webapps.apiit.edu.my/schedule/intakeview_intake.jsp?'
     storage = 'UCTI-Timetable'
     home_path = os.path.expanduser('~')
     storage_dir = os.path.join(home_path, storage)
