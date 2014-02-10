@@ -34,7 +34,7 @@ def makefile(base_url,intake,week,storage_file,file_name):
     request = urllib2.Request(base_url + 'Intake1=' + intake + \
             '&Submit=Submit&Week=' + week)
     request.add_header('User-Agent', \
-            'ucti-timetable.py/1.0 (+https://github.com/mavjs/ucti-timetable)')
+            'ucti-timetable.py/2.0 (+https://github.com/mavjs/ucti-timetable)')
     opener = urllib2.build_opener()
     html = opener.open(request).read()
     parse_html = BeautifulSoup(html)
@@ -73,6 +73,7 @@ def main(argv=None):
         intake = args.intake
         week = args.week
 
+    # probably it isn't working anymore
     base_url = 'http://webapps.apiit.edu.my/schedule/intakeview_intake.jsp?'
     storage = 'UCTI-Timetable'
     home_path = os.path.expanduser('~')
